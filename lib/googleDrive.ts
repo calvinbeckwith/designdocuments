@@ -1,4 +1,4 @@
-import { google } from "googleapis";
+import { google, docs_v1 } from "googleapis";
 
 const TEMPLATES_FOLDER_ID = process.env.GOOGLE_DRIVE_TEMPLATES_FOLDER_ID!;
 const OUTPUT_FOLDER_ID = process.env.GOOGLE_DRIVE_OUTPUT_FOLDER_ID!;
@@ -47,7 +47,7 @@ export async function getTemplateContext(): Promise<string> {
   return contexts.join("\n\n");
 }
 
-function extractDocText(doc: Parameters<typeof google.docs>[0] extends never ? never : Awaited<ReturnType<ReturnType<typeof google.docs>["documents"]["get"]>>["data"]): string {
+function extractDocText(doc: docs_v1.Schema$Document): string {
   const content = doc.body?.content ?? [];
   const lines: string[] = [];
 
