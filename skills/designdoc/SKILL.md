@@ -88,7 +88,7 @@ This Solutions Design Document does not replace or modify any previously execute
 The Solutions Design Document will contain a high-level definition of functional requirements to serve as a Statement of Work (SoW) that the Proton Professional Services team will utilize throughout the implementation in order to execute the agreed upon scope.
 
 Project Duration
-The length of the project is expected to be [X] weeks in total. This timeline is dependent on the Customer providing data within 2 weeks after the initial project kickoff. Delays to obtaining client data from the ERP will likely result in extension of the target go-live date for the Customer.
+The length of the project is expected to be 16 weeks in total. This timeline is dependent on the Customer providing data within 2 weeks after the initial project kickoff. Delays to obtaining client data from the ERP will likely result in extension of the target go-live date for the Customer.
 
 
 PROTON IMPLEMENTATION DELIVERABLES
@@ -309,7 +309,11 @@ Use `mcp__protoniq__format_paragraph` with `operation: "style"`:
 - `STAKEHOLDER REGISTER` → `HEADING_1`
 - `PROTON GURU TRAINING, END USER TRAINING, AND ENABLEMENT` → `HEADING_1`
 - `SCOPE OF SERVICES` → `HEADING_1`
+- `SOLUTION ARCHITECTURE DIAGRAM` → `HEADING_1`
+- `PROTON INTERNAL REVIEW` → `HEADING_1`
 - (If present) `THIRD-PARTY SOFTWARE` → `HEADING_1`; each `Integration #N:` line → `HEADING_2`
+
+`Project Duration` is an inline sub-header (not a heading style), but must be formatted at **14pt bold** using `mcp__protoniq__format_text` with `font_size: 14, bold: true`.
 
 ### Global font + color
 Use `mcp__protoniq__format_text` on the entire document range:
