@@ -274,6 +274,79 @@ Use `mcp__protoniq__create_document`:
 
 ---
 
+## Step 4b: Apply Formatting
+
+After creating the document, apply the following formatting using ProtonIQ tools. Read the document in structured mode first to get exact indices, then apply all changes. **Re-read after any insert/delete operation** since indices shift.
+
+### Paragraph styles
+Use `mcp__protoniq__format_paragraph` with `operation: "style"`:
+- Title line → `TITLE` + `alignment: "CENTER"`
+- `PURPOSE` → `HEADING_1`
+- `PROTON IMPLEMENTATION DELIVERABLES` → `HEADING_1`
+- `CRM Deliverables` → `HEADING_3`
+- `STAKEHOLDER REGISTER` → `HEADING_1`
+- `PROTON GURU TRAINING, END USER TRAINING, AND ENABLEMENT` → `HEADING_1`
+- `SCOPE OF SERVICES` → `HEADING_1`
+- (If present) `THIRD-PARTY SOFTWARE` → `HEADING_1`; each `Integration #N:` line → `HEADING_2`
+
+### Global font + color
+Use `mcp__protoniq__format_text` on the entire document range:
+- `font_family: "Cabin"`, `foreground_color: "#0D0746"`
+
+### Bold inline text
+Apply `bold: true` to:
+- The customer name wherever it appears in the title
+- `PRM Solutions, Inc.` in the PURPOSE paragraph
+- `Project Duration` (inline sub-header)
+- `ERP Integration and Custom Field Ingestion` (bullet header)
+- `AI Sales Recommendation Models` (inline within the activation paragraph)
+- `AI Model Activation` (bullet header)
+- `Opportunity Pipeline Configuration` (bullet header)
+- `Quote Entry` (bullet header)
+- `2-Way (Bidirectional) Syncs` (bullet header)
+- `Miscellaneous` (bullet header)
+- `Guru (Admin) Training Sessions` (sub-header)
+- `Proton Solution Documentation` (sub-header)
+- The header row text in each table (File Name, Description, AI Model Name, Definition, Location, Role)
+
+### Hyperlinks
+Use `mcp__protoniq__format_text` with `link` + `foreground_color: "#0b56c4"`:
+- `Proton Master Software and Services Agreement v3.November.2022` → `https://www.proton.ai/msa-v3-nov-2022`
+- `api.proton.ai` (in the 2-Way Syncs section) → `https://api.proton.ai`
+
+### Tables
+Replace each pipe-separated block with a real Google Docs table using `mcp__protoniq__manage_tables`. For each table:
+1. Find the index of the first pipe-separated row (e.g. "File Name | Description\n")
+2. Insert a table at that index with `operation: "insert_table"`
+3. Fill each cell using `mcp__protoniq__insert_text` at the correct cell indices (read doc after insert to get cell indices)
+4. Bold the header row
+5. Delete the old pipe-separated text rows (work bottom-to-top to preserve indices)
+
+**SFTP Files table** (2 columns × 9 rows — header + 8 file rows):
+- Header: File Name | Description
+- Rows: Customers.csv, ShipTos.csv, Contacts.csv, SalesReps.csv, OpenOrders.csv, Quotes90d.csv, Invoices30d.csv, ItemsERP.csv
+- If eCommerce is in scope, add a 10th row: ItemsEComm.csv | A file containing a full list of product records from the eCommerce site, inclusive of metadata, long descriptions, and image URLs
+
+**AI Models table** (3 columns × N rows — header + one row per model):
+- Header: AI Model Name | Definition | Location
+- Rows: Similar Items, Frequently Bought Together, Due to Reorder, Wallet Share, First Purchase, Quote Follow Up
+- If eCommerce in scope, add: Viewed Online, Complete the Cart
+
+**Stakeholder Register table** (2 columns × 5 rows — header + 4 stakeholder rows):
+- Header: Role | Description
+- Rows: [CUSTOMER] IT Stakeholder, [CUSTOMER] Sales Stakeholder, Proton Project Manager, Proton Data Engineer
+
+### Bullet indentation
+Apply `mcp__protoniq__format_paragraph` with `indent_start` to set proper nesting levels:
+- Level 0 bullets (section headers like ERP Integration, Opportunity Pipeline Configuration, Quote Entry, 2-Way Syncs, Miscellaneous, Implementation of CRM Suite): `indent_start: 18`
+- Level 1 bullets (items directly under a level 0): `indent_start: 54`
+- Level 2 bullets (sub-items, e.g. pipeline stage customizations, Contacts/Quotes under 2-way syncs): `indent_start: 90`
+
+### Table of Contents
+A real Google Docs TOC cannot be inserted programmatically. Tell the user to manually add it: in Google Docs, place the cursor after the title line, then go to **Insert > Table of contents**.
+
+---
+
 ## Step 5: Deliver
 
 Share back:
