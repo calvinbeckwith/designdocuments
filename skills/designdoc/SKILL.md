@@ -313,7 +313,7 @@ Use `mcp__protoniq__format_paragraph` with `operation: "style"`:
 - `PROTON INTERNAL REVIEW` → `HEADING_1`
 - (If present) `THIRD-PARTY SOFTWARE` → `HEADING_1`; each `Integration #N:` line → `HEADING_2`
 
-`Project Duration` is an inline sub-header (not a heading style), but must be formatted at **14pt bold** using `mcp__protoniq__format_text` with `font_size: 14, bold: true`.
+`Project Duration` is an inline sub-header (not a heading style). Format it at **14pt, not bold** using `mcp__protoniq__format_text` with `font_size: 14, bold: false`. After the "Project Duration" line, insert one blank paragraph using `mcp__protoniq__insert_text` so there is visual spacing before the project duration body text.
 
 ### Global font + color
 Use `mcp__protoniq__format_text` on the entire document range:
