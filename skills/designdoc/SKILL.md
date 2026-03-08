@@ -319,8 +319,9 @@ Replace each pipe-separated block with a real Google Docs table using `mcp__prot
 1. Find the index of the first pipe-separated row (e.g. "File Name | Description\n")
 2. Insert a table at that index with `operation: "insert_table"`
 3. Fill each cell using `mcp__protoniq__insert_text` at the correct cell indices (read doc after insert to get cell indices)
-4. Bold the header row
+4. Style the header row cells: bold, `foreground_color: "#FFFFFF"` (white text), `font_family: "Cabin"`
 5. Delete the old pipe-separated text rows (work bottom-to-top to preserve indices)
+6. **Note:** Cell background color (`#0d0745` dark navy) cannot be set programmatically — tell the user to manually select each header row and apply background color `#0d0745` using the Google Docs toolbar color bucket
 
 **SFTP Files table** (2 columns × 9 rows — header + 8 file rows):
 - Header: File Name | Description
