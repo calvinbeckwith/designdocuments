@@ -64,6 +64,8 @@ Only ask the user about items in the **Ask** category. Frame these as specific, 
 
 ## Step 3: Generate the Document
 
+> **Note:** The full formatting logic in this skill (Steps 3 and 4b) is currently written for **pre-sales** documents. Post-sales logic will be added separately. For now, apply this workflow only to pre-sales SDDs.
+
 ### PRE-SALES DOCUMENTS
 
 Use the master template below as the exact base. Substitute `[CUSTOMER]` with the customer name throughout. Include optional sections only where your research confirmed they are in scope. Do not include optional sections where there is no evidence, and do not include them as placeholder text or marked "(Optional)" — either include the fully written section or leave it out entirely.
@@ -363,7 +365,9 @@ For every bullet paragraph: first `operation: "remove_bullets"`, then `operation
 - **Level 1** (direct sub-items under a Level 0 header): `indent_start: 72`
 - **Level 2** (sub-items under Level 1 — asterisk disclaimer, pipeline customization items): `indent_start: 108`
 
-Apply the MSA hyperlink color `#0b56c4` AFTER the global Cabin/#0D0746 pass, or it will be overwritten.
+Apply the MSA hyperlink color AFTER the global Cabin/#0D0746 pass — two steps:
+1. Reset the full phrase "the Proton Master Software and Services Agreement v3.November.2022" to `#0D0746`
+2. Then apply `#0b56c4` + link `https://www.proton.ai/msa-v3-nov-2022` to ONLY "Proton Master Software and Services Agreement v3.November.2022" (excluding the word "the " before it)
 
 ### Table of Contents
 A real Google Docs TOC cannot be inserted programmatically. Tell the user to manually add it: in Google Docs, place the cursor after the title line, then go to **Insert > Table of contents**.
