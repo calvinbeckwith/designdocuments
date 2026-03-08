@@ -7,40 +7,55 @@ description: Creates Proton AI solution design documents for customer implementa
 
 You are helping a Proton AI Solutions Consultant create a professional Solution Design Document (SDD) for a customer implementation. These documents define scope, deliverables, and responsibilities and serve as the Statement of Work.
 
----
-
-## Step 1: Gather Information
-
-If not already provided, ask the user:
-
-1. **Pre-sales or post-sales?**
-   - Pre-sales = scoping a new deal for a prospect
-   - Post-sales = implementing for an existing customer
-
-2. **Customer name**
-
-3. **Which optional sections apply?** Run through this checklist:
-   - Does the customer have an existing CRM to import data from? (CRM Import)
-   - Do they need real-time customer-specific pricing from the ERP? (Pricing/Inventory API)
-   - Do they need Single Sign-On (SSO)?
-   - Do they have an eCommerce site to integrate? (Viewed Online, Complete the Cart AI model, ItemsEComm.csv)
-   - Do they need Outlook Calendar Sync?
-   - Any third-party integrations? (HubSpot, RingCentral, Klaviyo, Salesforce, etc.) — for each, get: purpose, who owns each side, any known limitations
-
-4. **ERP system name** (e.g., SAP, NetSuite, Eclipse, Epicor)
-
-5. **Project duration** (default is 12 weeks if not specified)
-
-6. **Any other custom scope** — automations, custom pipelines, custom fields, unique workflows
+Your job is to research the customer thoroughly using ProtonIQ before generating the document — the goal is to populate the SDD from what Proton already knows about this prospect or customer, not by asking the user a checklist of questions.
 
 ---
 
-## Step 2: Read a Reference Document (Post-Sales Only)
+## Step 1: Minimal Intake
 
-For **post-sales** docs, use `mcp__protoniq__read_document` to read a relevant past document from the post-sales templates folder for style and structure reference:
-- Post-sales templates folder: `1aPMMGXlktpYXRuyknEdENNmEdtxNv6UZ`
+Ask only:
+1. **Customer name** (if not already provided)
+2. **Pre-sales or post-sales?**
 
-For **pre-sales** docs, skip this step — the full master template is embedded in this skill below.
+That's it. Do not ask about scope, integrations, or optional sections — you will determine those from research.
+
+---
+
+## Step 2: Research the Customer in ProtonIQ
+
+Use ProtonIQ tools to build a complete picture of this customer before writing a single word of the document. The richer your research, the more accurate the SDD.
+
+### 2a. Find the company and deal
+Use `mcp__protoniq__search` with `search_type: "companies"` to find the company record, then `mcp__protoniq__search` with `search_type: "deals"` to find the active deal. Use the returned IDs to get full context:
+```
+mcp__protoniq__get_context  entity: "company"  id: [company_id]
+mcp__protoniq__get_context  entity: "deal"     id: [deal_id]
+```
+
+### 2b. Search Gong calls and emails
+Use `mcp__protoniq__semantic_search` to mine call recordings, emails, and meeting notes for scope details. Run multiple targeted searches:
+- `"[customer name] ERP integration SFTP"` — to find ERP system and integration method
+- `"[customer name] ecommerce website"` — to find if eCommerce is in scope
+- `"[customer name] HubSpot RingCentral Klaviyo Salesforce integration"` — to find third-party integrations
+- `"[customer name] SSO single sign on"` — to find if SSO was discussed
+- `"[customer name] pricing inventory API"` — to find if real-time pricing is needed
+- `"[customer name] CRM import migration"` — to find if existing CRM data needs importing
+- `"[customer name] Outlook calendar"` — to find if calendar sync is in scope
+- `"[customer name] out of scope not included"` — to find explicitly excluded items
+- `"[customer name] pipeline stages custom fields automations"` — to find pipeline and workflow details
+
+Use `include_snippet: true` and `expand_queries: true` to get richer results.
+
+### 2c. Read any existing documents
+Use `mcp__protoniq__search` with `search_type: "knowledge_base"` to find any scoping docs, proposal decks, or existing SDDs for this customer. Read the most relevant ones with `mcp__protoniq__read_document`.
+
+### 2d. Synthesize what you found
+After research, determine for each optional section:
+- **Include** — evidence in ProtonIQ confirms this is in scope
+- **Exclude** — evidence confirms it is out of scope, OR no evidence and it's not a standard deliverable
+- **Ask** — the section is relevant but ProtonIQ doesn't have enough signal to include or exclude it confidently
+
+Only ask the user about items in the **Ask** category. Frame these as specific, targeted questions — not a generic checklist. For example: "I didn't find anything about SSO in your calls with [Customer] — is that in scope?" rather than running through every optional item.
 
 ---
 
@@ -48,7 +63,9 @@ For **pre-sales** docs, skip this step — the full master template is embedded 
 
 ### PRE-SALES DOCUMENTS
 
-Use the master template below as the exact base. Substitute `[CUSTOMER]` with the customer name throughout. Include optional sections only if confirmed in Step 1. Add any custom third-party integrations to the Third-Party Software section using the format shown.
+Use the master template below as the exact base. Substitute `[CUSTOMER]` with the customer name throughout. Include optional sections only where your research confirmed they are in scope. Do not include optional sections where there is no evidence, and do not include them as placeholder text or marked "(Optional)" — either include the fully written section or leave it out entirely.
+
+For third-party integrations discovered in research, write each one in the Third-Party Software section using the standard format: Integration Purpose, Implementation Approach, Customer Responsibilities, Limitations/Scope Boundaries.
 
 ---
 
@@ -90,7 +107,8 @@ OpenOrders.csv | A file containing all current open order lines in the system
 Quotes90d.csv | A file containing a moving window of quote line records — 90 days on a rolling basis
 Invoices30d.csv | A file containing a moving window of invoice line records — 30 days on a rolling basis
 ItemsERP.csv | A file containing a full list of product records from the ERP or PIM
-[ItemsEComm.csv — INCLUDE ONLY IF ECOMMERCE] | A file containing a full list of product records from the eCommerce site, inclusive of metadata, long descriptions, and image URLs
+[Include ItemsEComm.csv ONLY if eCommerce is confirmed in scope]
+ItemsEComm.csv | A file containing a full list of product records from the eCommerce site, inclusive of metadata, long descriptions, and image URLs
 
 Proton will provide a Data Requirements template outlining the required and recommended metadata fields for each file during the implementation.
 
@@ -104,11 +122,12 @@ Due to Reorder | Analyzes account purchasing patterns to generate reorder recomm
 Wallet Share | Analyzes spending across product categories to identify gaps and increase category spending. | Accounts
 First Purchase | Recognizes when a customer purchases a new product for the first time and suggests complementary products. | Accounts
 Quote Follow Up | Displays actionable quotes for users to follow up on. Shows if line items have been purchased since the quote was delivered. | Accounts
-Viewed Online | Displays products the account has viewed on the eCommerce site. [INCLUDE ONLY IF ECOMMERCE] | Accounts
-Complete the Cart | Displays product recommendations based on what is in the customer's eCommerce cart. [INCLUDE ONLY IF ECOMMERCE] | eCommerce
+[Include the following two rows ONLY if eCommerce is confirmed in scope]
+Viewed Online | Displays products the account has viewed on the eCommerce site. | Accounts
+Complete the Cart | Displays product recommendations based on what is in the customer's eCommerce cart. | eCommerce
 
 
-[OPTIONAL — INCLUDE ONLY IF CRM IMPORT CONFIRMED]
+[Include this section ONLY if CRM import was confirmed in research]
 CRM Import
 Proton will do a one-off import of [CUSTOMER]'s existing CRM objects from [CRM System].
 - One-off imports will be serviceable via SFTP
@@ -136,7 +155,7 @@ The Proton Professional Services team will provide an Opportunity Pipeline with 
 - Custom fields on Opportunities
 
 
-[OPTIONAL — INCLUDE ONLY IF PRICING API CONFIRMED]
+[Include this section ONLY if Pricing/Inventory API was confirmed in research]
 Pricing / Inventory API (Customer-Specific Pricing / Inventory)
 Proton will support the integration of real-time customer-specific pricing data for [CUSTOMER] (assuming an ERP endpoint exists to provide pricing and inventory data for a specific customer + product SKU).
 Proton will support:
@@ -146,21 +165,21 @@ Proton will support:
 [CUSTOMER] is responsible for providing Proton with the necessary path and credentials to place a GET API request using customer ID and product ID to retrieve customer-specific price and live inventory.
 
 
-[OPTIONAL — INCLUDE ONLY IF SSO CONFIRMED]
+[Include this section ONLY if SSO was confirmed in research]
 Single Sign On (SSO)
 Proton and [CUSTOMER] will coordinate to integrate with the Identity Provider (IdP) used by [CUSTOMER] to complete integration work necessary for Single Sign On enablement.
 
 
-[OPTIONAL — INCLUDE ONLY IF ECOMMERCE CONFIRMED]
+[Include this section ONLY if eCommerce is confirmed in research]
 API-based Ingestion of Viewed Online Sales Plays
-- [CUSTOMER] will provide Proton access to the eCommerce site's public API endpoints (or equivalent data feed) required to enable Viewed Online tracking and product recommendation functionality
+- [CUSTOMER] will provide Proton access to the eCommerce site's public API endpoints required to enable Viewed Online tracking and product recommendation functionality
 - Proton will supply API documentation outlining the required endpoints, authentication method, and data payload specifications
-- [CUSTOMER] will expose the necessary events (e.g., product views, add-to-cart, purchases) via API so Proton can receive user activity data in a secure and standardized format
+- [CUSTOMER] will expose the necessary events (e.g., product views, add-to-cart, purchases) via API
 - Proton will advise the integration to ensure activity data is transmitted successfully and can be consumed by Proton's recommendation models
 - All data exchanges will occur through Proton's secure, authenticated API endpoints as documented at api.proton.ai
 
 
-[OPTIONAL — INCLUDE ONLY IF OUTLOOK CONFIRMED]
+[Include this section ONLY if Outlook Calendar Sync was confirmed in research]
 Outlook Calendar Sync
 Proton will set up a one-way integration with [CUSTOMER]'s instance of Outlook Calendar to allow tasks created in Proton to sync to Microsoft Outlook.
 - Users can create tasks in Proton and optionally sync them to their Outlook calendar
@@ -184,15 +203,15 @@ Miscellaneous
 
 THIRD-PARTY SOFTWARE
 
+[Include this section only if third-party integrations were confirmed in research. For each integration, use the format below. If no third-party integrations, omit this section entirely.]
+
 The Third-Party Software section provides a high-level system architecture and outlines each use case that requires an integration between a third-party system and Proton.
 
-[For each third-party integration, use this format:]
-
 Integration #[N]: [Integration Name]
-Integration Purpose: [What it does and why]
-Implementation Approach: [How Proton will configure it — API, webhook, scheduled pull, etc. Be specific about what Proton builds.]
-[CUSTOMER] Responsibilities: [What the customer must provide — API credentials, field mappings, data quality, etc.]
-Limitations / Scope Boundaries: [What is explicitly NOT included. Be clear about one-way vs. two-way, what data is excluded, etc.]
+Integration Purpose: [What it does and why — pulled from research]
+Implementation Approach: [How Proton will configure it — API, webhook, scheduled pull, etc.]
+[CUSTOMER] Responsibilities: [What the customer must provide — API credentials, field mappings, etc.]
+Limitations / Scope Boundaries: [What is explicitly NOT included — one-way vs. two-way, excluded data, etc.]
 
 
 STAKEHOLDER REGISTER
@@ -239,11 +258,7 @@ Significant changes to project scope, incorrect assumptions, or missing prerequi
 
 ### POST-SALES DOCUMENTS
 
-For post-sales, use the reference document read in Step 2 as the style guide. The structure is similar but focused on what is being *implemented* (not scoped), so:
-- Be more specific about exact configuration details
-- Include customer-specific pipeline stages, field names, and automation logic where known
-- Reference the signed order form scope
-- Use the same Purpose, Deliverables, Stakeholder Register, Scope of Services structure
+For post-sales, the structure is the same but focus on what is being *implemented* based on the signed order form scope. Use `mcp__protoniq__read_document` to read a reference doc from the post-sales templates folder (`1aPMMGXlktpYXRuyknEdENNmEdtxNv6UZ`) for style reference. Apply the same research-first approach — search ProtonIQ for implementation kickoff calls, scoping notes, and order form details to populate the document accurately.
 
 ---
 
@@ -265,6 +280,7 @@ Share back:
 - Document title
 - Direct Google Doc link
 - Which output folder to move it to
-- 2-3 bullet summary of what was scoped so the user can sanity-check it
+- 2-3 bullet summary of what was included so the user can quickly sanity-check it
+- Any gaps you couldn't fill from ProtonIQ (so the user knows what to manually review in the doc)
 
 If in Slack, use `mcp__claude_ai_Slack__slack_send_message` to post the link.
