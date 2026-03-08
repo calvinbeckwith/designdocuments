@@ -319,20 +319,27 @@ Use `mcp__protoniq__format_paragraph` with `operation: "style"`:
 Use `mcp__protoniq__format_text` on the entire document range:
 - `font_family: "Cabin"`, `foreground_color: "#0D0746"`
 
+### 14pt inline sub-headers (not bold)
+Use `mcp__protoniq__format_text` with `font_size: 14, bold: false` on each of the following inline sub-headers. These appear inside bullet lists but act as section headers — they should be visually distinct through size alone, not weight:
+- `Implementation of the Proton CRM Sales Suite, inclusive of:`
+- `Opportunity Pipeline Configuration`
+- `Miscellaneous`
+- `Quote Entry` (if in scope)
+- `Order Entry` (if in scope)
+- `2-Way (Bidirectional) Syncs` (if in scope)
+- `Guru (Admin) Training Sessions`
+- `(Optional) End-User (Sales Rep) Training`
+- `Proton Solution Documentation`
+- Any other ad hoc section sub-headers added during the implementation
+
+Do NOT add an empty row after these (unlike `Project Duration`).
+
 ### Bold inline text
 Apply `bold: true` to:
 - The customer name wherever it appears in the title
 - `PRM Solutions, Inc.` in the PURPOSE paragraph
-- `Project Duration` (inline sub-header)
 - `ERP Integration and Custom Field Ingestion` (bullet header)
 - `AI Sales Recommendation Models` (inline within the activation paragraph)
-- `AI Model Activation` (bullet header)
-- `Opportunity Pipeline Configuration` (bullet header)
-- `Quote Entry` (bullet header)
-- `2-Way (Bidirectional) Syncs` (bullet header)
-- `Miscellaneous` (bullet header)
-- `Guru (Admin) Training Sessions` (sub-header)
-- `Proton Solution Documentation` (sub-header)
 - The header row text in each table (File Name, Description, AI Model Name, Definition, Location, Role)
 
 ### Hyperlinks
