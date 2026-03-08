@@ -319,8 +319,8 @@ Use `mcp__protoniq__format_paragraph` with `operation: "style"`:
 Use `mcp__protoniq__format_text` on the entire document range:
 - `font_family: "Cabin"`, `foreground_color: "#0D0746"`
 
-### 14pt inline sub-headers (not bold)
-Use `mcp__protoniq__format_text` with `font_size: 14, bold: false` on each of the following inline sub-headers. These appear inside bullet lists but act as section headers — they should be visually distinct through size alone, not weight:
+### 14pt inline sub-headers (not bold, no bullet)
+These lines act as section headers within the document body — they should be 14pt, not bold, and have no bullet point. Use `mcp__protoniq__format_text` with `font_size: 14, bold: false`, then `mcp__protoniq__format_paragraph` with `operation: "remove_bullets"` on each:
 - `Implementation of the Proton CRM Sales Suite, inclusive of:`
 - `Opportunity Pipeline Configuration`
 - `Miscellaneous`
@@ -332,7 +332,7 @@ Use `mcp__protoniq__format_text` with `font_size: 14, bold: false` on each of th
 - `Proton Solution Documentation`
 - Any other ad hoc section sub-headers added during the implementation
 
-Do NOT add an empty row after these (unlike `Project Duration`).
+Target only the exact paragraph for each header — do not include the sub-items beneath it, which should retain their bullet formatting. Do NOT add an empty row after these (unlike `Project Duration`).
 
 ### Bold inline text
 Apply `bold: true` to:
