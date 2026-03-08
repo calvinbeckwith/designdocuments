@@ -358,10 +358,12 @@ Replace each pipe-separated block with a real Google Docs table using `mcp__prot
 - Rows: [CUSTOMER] IT Stakeholder, [CUSTOMER] Sales Stakeholder, Proton Project Manager, Proton Data Engineer
 
 ### Bullet indentation
-Apply `mcp__protoniq__format_paragraph` with `indent_start` to set proper nesting levels:
-- Level 0 bullets (section headers like ERP Integration, Opportunity Pipeline Configuration, Quote Entry, 2-Way Syncs, Miscellaneous, Implementation of CRM Suite): `indent_start: 18`
-- Level 1 bullets (items directly under a level 0): `indent_start: 54`
-- Level 2 bullets (sub-items, e.g. pipeline stage customizations, Contacts/Quotes under 2-way syncs): `indent_start: 90`
+For every bullet paragraph: first `operation: "remove_bullets"`, then `operation: "add_bullets"` with `bullet_preset: "BULLET_DISC_CIRCLE_SQUARE"` and `indent_first_line: -18`. Set `indent_start` by level:
+- **Level 0** (top-level section headers — ERP Integration, AI models intro, Implementation of CRM Suite, Opportunity Pipeline Configuration, Miscellaneous, Guru Training Sessions, End-User Training, Proton Solution Documentation): `indent_start: 36`
+- **Level 1** (direct sub-items under a Level 0 header): `indent_start: 72`
+- **Level 2** (sub-items under Level 1 — asterisk disclaimer, pipeline customization items): `indent_start: 108`
+
+Apply the MSA hyperlink color `#0b56c4` AFTER the global Cabin/#0D0746 pass, or it will be overwritten.
 
 ### Table of Contents
 A real Google Docs TOC cannot be inserted programmatically. Tell the user to manually add it: in Google Docs, place the cursor after the title line, then go to **Insert > Table of contents**.
