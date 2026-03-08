@@ -39,10 +39,13 @@ Use `mcp__protoniq__semantic_search` to mine call recordings, emails, and meetin
 - `"[customer name] HubSpot RingCentral Klaviyo Salesforce integration"` — to find third-party integrations
 - `"[customer name] SSO single sign on"` — to find if SSO was discussed
 - `"[customer name] pricing inventory API"` — to find if real-time pricing is needed
-- `"[customer name] CRM import migration"` — to find if existing CRM data needs importing
+- `"[customer name] CRM import migration existing data"` — to find if an existing CRM needs to be imported (only include CRM Import section if there is a CRM already in place with data to migrate)
 - `"[customer name] Outlook calendar"` — to find if calendar sync is in scope
 - `"[customer name] out of scope not included"` — to find explicitly excluded items
 - `"[customer name] pipeline stages custom fields automations"` — to find pipeline and workflow details
+- `"[customer name] quote entry order entry quoting"` — to find if reps will create quotes in Proton (only include Quote Entry section if confirmed)
+- `"[customer name] two way sync bidirectional contacts quotes"` — to find if 2-way sync was discussed (only include 2-Way Syncs section if confirmed)
+- `"[customer name] order entry EDI"` — to find if order entry is relevant
 
 Use `include_snippet: true` and `expand_queries: true` to get richer results.
 
@@ -112,7 +115,6 @@ ItemsEComm.csv | A file containing a full list of product records from the eComm
 
 Proton will provide a Data Requirements template outlining the required and recommended metadata fields for each file during the implementation.
 
-AI Model Activation
 Activation and training of all Proton AI Sales Recommendation Models using [CUSTOMER]'s provided dataset, including:
 
 AI Model Name | Definition | Location
@@ -186,9 +188,15 @@ Proton will set up a one-way integration with [CUSTOMER]'s instance of Outlook C
 - Optionally, Proton can ingest flagged emails in Outlook into Proton via email sync functionality
 
 
+[Include this section ONLY if quote entry was confirmed in research — i.e., sales reps will create quotes directly in Proton and push them back to the ERP]
 Quote Entry
 Proton's quote entry functionality will be used so sales reps can create quotes directly in Proton CRM. Quotes will be updated back to the ERP using quote 2-way sync functionality.
 
+[Include this section ONLY if order entry was confirmed in research — i.e., reps will enter orders directly in Proton]
+Order Entry
+Proton's order entry functionality will be used so sales reps can place orders directly in Proton CRM. Orders will be transmitted back to the ERP system.
+
+[Include this section ONLY if 2-way sync was confirmed in research — typically accompanies Quote Entry or Order Entry]
 2-Way (Bidirectional) Syncs
 Two-way synchronization will be supported via Proton Professional Services for only the following objects:
 - Contacts
@@ -201,17 +209,18 @@ Miscellaneous
 - Customer-facing custom data freshness indicators will not be supported
 
 
+[Include THIRD-PARTY SOFTWARE section ONLY if third-party integrations were confirmed in research. If no integrations, omit this section entirely.]
 THIRD-PARTY SOFTWARE
-
-[Include this section only if third-party integrations were confirmed in research. For each integration, use the format below. If no third-party integrations, omit this section entirely.]
 
 The Third-Party Software section provides a high-level system architecture and outlines each use case that requires an integration between a third-party system and Proton.
 
+[For each confirmed integration, write it using the following format. Use a process-focused approach — explain how the integration works in plain language so a non-technical reader can understand it. If specific API endpoints, authentication methods, or technical callouts were mentioned in Gong calls or emails, include them since they are critical to understanding how the integration will be set up.]
+
 Integration #[N]: [Integration Name]
-Integration Purpose: [What it does and why — pulled from research]
-Implementation Approach: [How Proton will configure it — API, webhook, scheduled pull, etc.]
-[CUSTOMER] Responsibilities: [What the customer must provide — API credentials, field mappings, etc.]
-Limitations / Scope Boundaries: [What is explicitly NOT included — one-way vs. two-way, excluded data, etc.]
+Integration Purpose: [What the integration does and why it is being set up — written in plain business terms]
+Implementation Approach: [How the integration will work, step by step, in plain language. Include any specific endpoints, authentication methods, or technical details that were called out in discovery calls, since these are important for setup.]
+[CUSTOMER] Responsibilities: [What the customer must provide or do — credentials, field mappings, IT contacts, access grants, etc.]
+Limitations / Scope Boundaries: [What is explicitly NOT included — one-way vs. two-way, excluded objects, unsupported data types, etc.]
 
 
 STAKEHOLDER REGISTER
@@ -252,6 +261,17 @@ The scope of Professional Services ("Services") is limited to completion of the 
 [CUSTOMER] is required to provide (at minimum) one technical contact for the duration of the project. Extraction of data from ERP and other third-party sources is the Customer's responsibility. Data not provided in a timely manner is the responsibility of the client and does not constitute any financial discounts if customer delays exist.
 
 Significant changes to project scope, incorrect assumptions, or missing prerequisites may affect the cost, resources, or schedule. Any such modification shall be memorialized in a mutually executed Change Order that details material changes.
+
+
+SOLUTION ARCHITECTURE DIAGRAM
+
+[Diagram to be inserted here]
+
+
+PROTON INTERNAL REVIEW
+
+Proton Implementation Plan Reviewed By:
+Date:
 ```
 
 ---
